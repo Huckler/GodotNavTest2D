@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Obstacle.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Mover.gd" type="Script" id=2]
+
+[sub_resource type="NavigationPolygon" id=3]
+vertices = PoolVector2Array( 194, 60, 719, 116, 862, 509, 258, 576, 90, 440, 78, 195 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4, 5 ) ]
+outlines = [ PoolVector2Array( 194, 60, 719, 116, 862, 509, 258, 576, 90, 440, 78, 195 ) ]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 20, 20 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 20, 20 )
+
+[node name="World" type="Node2D"]
+
+[node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="."]
+position = Vector2( 49, -23 )
+navpoly = SubResource( 3 )
+
+[node name="Mover" type="KinematicBody2D" parent="NavigationPolygonInstance"]
+position = Vector2( 239, 125 )
+script = ExtResource( 2 )
+speed = 110
+
+[node name="ColorRect" type="ColorRect" parent="NavigationPolygonInstance/Mover"]
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NavigationPolygonInstance/Mover"]
+shape = SubResource( 1 )
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="NavigationPolygonInstance/Mover"]
+avoidance_enabled = true
+neighbor_dist = 120.0
+max_speed = 110.0
+
+[node name="Target" type="KinematicBody2D" parent="NavigationPolygonInstance"]
+unique_name_in_owner = true
+position = Vector2( 650, 450 )
+
+[node name="ColorRect" type="ColorRect" parent="NavigationPolygonInstance/Target"]
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+color = Color( 1, 0, 0, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NavigationPolygonInstance/Target"]
+shape = SubResource( 2 )
+
+[node name="Obstacle" parent="NavigationPolygonInstance" instance=ExtResource( 1 )]
+position = Vector2( 484, 192 )
+
+[node name="Obstacle2" parent="NavigationPolygonInstance" instance=ExtResource( 1 )]
+position = Vector2( 520, 334 )
+
+[node name="Obstacle3" parent="NavigationPolygonInstance" instance=ExtResource( 1 )]
+position = Vector2( 400, 271 )
+
+[node name="Obstacle4" parent="NavigationPolygonInstance" instance=ExtResource( 1 )]
+position = Vector2( 334, 370 )
+
+[connection signal="target_reached" from="NavigationPolygonInstance/Mover/NavigationAgent2D" to="NavigationPolygonInstance/Mover" method="_on_NavigationAgent2D_target_reached"]
+[connection signal="velocity_computed" from="NavigationPolygonInstance/Mover/NavigationAgent2D" to="NavigationPolygonInstance/Mover" method="_on_NavigationAgent2D_velocity_computed"]

@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Obstacle.gd" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 20, 20 )
+
+[node name="Obstacle" type="KinematicBody2D"]
+position = Vector2( 488, 223 )
+script = ExtResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+color = Color( 0.956863, 0.956863, 0.956863, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+
+[node name="Timer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.5
+autostart = true
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+estimate_radius = false
+radius = 90.0
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
